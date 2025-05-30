@@ -15,9 +15,8 @@
         <nav class="navbar">
             <A href="#Início" class="logo">DesignSwap ★</A>
             <ul class="navlinks">
-                <li><A href="#Início">Início</A></li>
-                <li><A href="#Cardápio"> Cardápio</A></li>
-                <li><A href="#Promoções"> Promoções</A></li>
+                <li><A href="#Sobre">Sobre</A></li>
+                <li><A href="#Designs"> Designs </A></li>
                 <li><A href="#Contato"> Contato</A></li>
             </ul>
         </nav>
