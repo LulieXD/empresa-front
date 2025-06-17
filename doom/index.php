@@ -2,71 +2,74 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=], initial-scale=1.0">
-    <title>Empresinha erriessi</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
 </head>
 <body>
+   <?php
 
-<?php
+// Configurações do banco de dados
+$host = 'localhost';
+$user = 'root'; // usuário padrão do XAMPP
+$password = ''; // senha padrão do XAMPP (vazia)
+$database = 'system_cd'; // substitua pelo nome do seu banco de dados
 
-//criptografia de senha
-echo password_hash(123456, PASSWORD_DEFAULT);
+// Conectar ao banco de dados
+$conn = new mysqli($host, $user, $password, $database);
 
-
-  //receber dados do formulário
- $dados= filter_input_array(INPUT_POST, FILTER_DEFAULT);
-  //Acessar o IF quando o user clicar no botão de acessar o formulário
-if(!empty($dados['SendLogin'])){
-   var_dump($dados);
+// Verificar conexão
+if ($conn->connect_error) {
+    die("Falha na conexão: " . $conn->connect_error);
 }
-?>
 
-<!---Navegação--->
-<div class="content">
-    <nav class="navbar">
-             <A href="#Início" class="logo">DesignSwap ★</A>
-        <ul class="navlinks">
-             <li><A href="#Sobre">Sobre</A></li>
-             <li><A href="#Designs"> Designs </A></li>
-             <li><A href="#Contato"> Contato</A></li>
-        </ul>
-    </nav>
-</div>
+// Criptografia de senha (apenas para exemplo/criação de usuários)
+// echo password_hash(123456, PASSWORD_DEFAULT);
 
-<!---Início do Forms--->
+// Receber dados do forms
+$dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+
+// Acessar o IF quando o usuario clicar no botão de acesso do formulario
+if (!empty($dados["Sendlogin"])) {
+    // Preparar a consulta SQL
+    $query_usuario = "SELECT id, senha FROM usuarios WHERE usuario = ? LIMIT 1";
+    $stmt = $conn->prepare($query_usuario);
+    $stmt->bind_param("s", $dados["usuario"]);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    
+    if ($resultado->num_rows == 1) {
+        // Usuário encontrado, verificar senha
+        $row_usuario = $resultado->fetch_assoc();
+        if (md5($dados["senha_usuario"], $row_usuario['senha'])) {
+            // Senha correta - iniciar sessão e redirecionar
+            session_start();
+            $_SESSION['id'] = $row_usuario['id'];
+            $_SESSION['usuario'] = $dados["usuario"];
+            
+            header("Location: dashboard.php"); // redireciona para página restrita
+            exit();
+        } else {
+            echo "<p style='color: red'>Erro: Senha incorreta!</p>";
+        }
+    } else {
+        echo "<p style='color: red'>Erro: Usuário não encontrado!</p>";
+    }
+}
+
+   ?>
+
+<!-- Inicio do formulario -->
 <form method="POST" action="">
 
-<label>Usuário</label>
-<input type="text" name="usuario" placeholder="Digite o usuário">
-<br><br>
-<label>Senha</label>
-<input type="password" name="senha" placeholder="Digite a senha">
-<br><br>
-<input type="submit" name="Sendlogin" value="acessar">
-<br><br>
+<label>Usuário: </label>
+<input type="text" name="usuario" placeholder="digite o usuário" required><br><br>
 
+<label>Senha: </label>
+<input type="password" name="senha_usuario" placeholder="digite a senha" required><br><br>
+
+<input type="submit" name="Sendlogin" value="Acessar">
 </form>
-<!---fim do formulário--->
-
-<?
-//Configuração do banco
-$host = 'localhost';
-$user ='root'; // user padrão
-$password = ''; //senha padrão (vazio)
-$database = 'nome_do_banco'; // substituir pelo seu banco
-
-//Conectar ao banco
-$conn = new mysqli ($host, $user, $password);
-$database;
-
-//Verificar conexão
-if ($conn -> connect_error){
-    die("falha na conexão". $conn -> connect_error);
-}
-
+<!-- fim do formulario -->
 
 </body>
 </html>
