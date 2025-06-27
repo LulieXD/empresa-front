@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Empresinha erriessi</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
    <?php
@@ -32,7 +33,7 @@ $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 if (!empty($dados["Sendlogin"])) {
     // Preparar a consulta SQL
     $query_usuario = "SELECT id, senha FROM usuarios WHERE usuario = ? LIMIT 1";
-    $stmt = $conn->prepare($query_usuario);
+    $stmt = $conn->prepare($query_usuario); 
     $stmt->bind_param("s", $dados["usuario"]);
     $stmt->execute();
     $resultado = $stmt->get_result();
