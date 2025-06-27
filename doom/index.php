@@ -13,7 +13,7 @@
 $host = 'localhost';
 $user = 'root'; // usuário padrão do XAMPP
 $password = ''; // senha padrão do XAMPP (vazia)
-$database = 'system_cd'; // substitua pelo nome do seu banco de dados
+$database = 'empresa_front'; // substitua pelo nome do seu banco de dados
 
 // Conectar ao banco de dados
 $conn = new mysqli($host, $user, $password, $database);
